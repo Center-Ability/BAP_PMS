@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bap.mappers.mem-Mapper">
+	
+	<insert id="create">
+		insert into
+			MEM
+		values(#{mem_id},#{mem_pass},#{mem_name},#{mem_bir},#{mem_addr},
+			   #{mem_zipcode},#{mem_rank},#{mem_hp},#{mem_mail},#{mem_enabled},
+			   #{mem_img},#{mem_regdate},#{mem_enddate})
+	</insert>
+
+	<select id="read" resultType="com.bap.domain.MemVO">
+		select
+			*
+		from
+			MEM
+		where mem_id=#{mem_id}
+	</select>
+	
+	<update id="update">
+		update MEM set
+			mem_id=#{mem_id},
+			mem_pass=#{mem_pass},
+			mem_name=#{mem_name},
+			mem_bir=#{mem_bir},
+			mem_addr=#{mem_addr},
+			mem_zipcode=#{mem_zipcode},
+			mem_rank=#{mem_rank},
+			mem_hp=#{mem_hp},
+			mem_mail=#{mem_mail},
+			mem_enabled=#{mem_enabled},
+			mem_img=#{mem_img},
+			mem_regdate=#{mem_regdate},
+			mem_enddate=#{mem_enddate}
+		where mem_id=#{mem_id}
+	</update>
+
+	<delete id="delete">
+		delete from MEM where mem_id=#{mem_id}
+	</delete>
+	
+	<select id="searchNameById" resultType="String">
+		select
+			mem_name
+		from
+			MEM
+		where
+			mem_id=#{mem_id}
+	</select>
+	
+	<select id="listAll" resultType="com.bap.domain.MemVO">
+		<![CDATA[
+			select *
+			from MEM
+			order by mem_regdate desc
+		]]>
+	</select>
+
+	<select id="noGroupMember" resultType="com.bap.domain.MemVO">
+		<![CDATA[
+			select
+				*
+			from
+				mem
+			where
+				mem_id not in (select mem_id from team)
+			order by mem_regdate desc
+		]]>
+	</select>
+	
+	<select id="myTeamList" resultType="com.bap.domain.MemVO">
+		<![CDATA[
+			select
+				*
+			from
+				mem
+			where
+				mem_id in (select mem_id from team where pro_num = #{pro_num})
+			order by 
+				mem_regdate desc
+		]]>
+	</select>
+	
+	<select id="readIdByName" resultType="String">
+		select
+			mem_id
+		from
+			MEM
+		where
+			mem_name = #{mem_name}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+	

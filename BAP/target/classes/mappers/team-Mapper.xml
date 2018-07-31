@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bap.mappers.team-Mapper">
+	
+	<insert id="create">
+		insert into
+			TEAM(pro_num, mem_id)
+		values(#{pro_num},#{mem_id})
+	</insert>
+	
+	<delete id="delete">
+		delete from TEAM where pro_num = #{pro_num}
+	</delete>	
+</mapper>

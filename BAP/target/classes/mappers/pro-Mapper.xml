@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bap.mappers.pro-Mapper">
+	<insert id="create">
+		insert into
+			PRO(pro_name, mem_id, pro_contents, pro_start, pro_end)
+		values ( #{pro_name}, #{mem_id}, #{pro_contents}, #{pro_start}, #{pro_end} )
+	</insert>
+	
+	<select id="readProjectOne" resultType="com.bap.domain.ProVO">
+		select
+			*
+		from
+			PRO
+		where
+			pro_num = #{pro_num}
+	</select>
+	
+	<select id="searchPro_numById" resultType="Integer">
+		select
+			pro_num
+		from
+			TEAM
+		where
+			mem_id = #{mem_id}
+	</select>
+	
+	<select id="searchMem_nameById" resultType="String">
+		select
+			mem_name
+		from
+			MEM
+		where
+			mem_id = #{mem_id}
+	</select>
+	
+	<!-- 프로젝트 디테일 그룹정보 데이터 DTO로 가져오기 -->
+	<select id="searchGroupInfoByPro_num" resultType="com.bap.dto.GroupInfoDTO">
+		<![CDATA[
+			select
+				*
+			from
+				PROJECT_DETAIL_GROUP_INFO_VIEW
+			where
+				pro_num = #{pro_num}
+		]]>
+	</select>
+	
+</mapper>

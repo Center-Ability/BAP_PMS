@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bap.mappers.notice-Mapper">
+
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and notice_title like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and notice_content like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and mem_name like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( notice_title like '%'||#{keyword}||'%' OR notice_content like '%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( notice_content like '%'||#{keyword}||'%' OR mem_name like '%'||#{keyword}||'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="listSearch" resultType="com.bap.dto.NoticeDTO">
+		<![CDATA[
+		select 
+			*
+		from 
+			notice_view
+		where
+			notice_no > 0
+		]]>
+
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			notice_no desc
+		]]>
+	</select>
+
+	<select id="listSearchCount" resultType="int">
+		<![CDATA[
+		select 
+			count(notice_no)
+		from 
+			notice_view
+		where
+			notice_no > 0
+		]]>
+	
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			notice_no desc
+		]]>
+	</select>
+	
+	<select id="detail" resultType="com.bap.dto.NoticeDTO">
+		select
+			*
+		from
+			notice_view
+		where
+			notice_no = #{notice_no}
+	</select>
+	
+	<update id="modify">
+		update
+			notice
+		set
+			notice_title = #{notice_title},
+			notice_content = #{notice_content}
+		where
+			notice_no = #{notice_no}
+	</update>
+	
+	<delete id="remove">
+		delete from
+			notice
+		where
+			notice_no = #{notice_no}
+	</delete>
+	
+	<insert id="regist">
+		insert into
+			notice(notice_title, mem_id, notice_content)
+		values
+			(#{notice_title}, #{mem_id}, #{notice_content})
+	</insert>
+	
+	<select id="listAll" resultType="com.bap.dto.NoticeDTO">
+	<![CDATA[
+	select
+	notice_no,
+	notice_title,
+	mem_name,
+	mem_rank,
+	notice_date,
+	notice_content,
+	mem_id
+	from
+	notice_view
+	where
+	notice_no > 0
+	order by
+	notice_no desc,
+	notice_date desc
+	]]>
+	</select>
+	
+<!--
+	<select id="listAll" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	notice_no,
+	notice_title,
+	mem_id,
+	notice_date,
+	notice_content
+	from
+	notice
+	where
+	notice_no > 0
+	order by
+	notice_no desc,
+	notice_date desc
+	]]>
+	</select>
+	
+	<select id="listPage" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	*
+	from notice
+	order by
+	notice_no desc		
+	]]>
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+	select
+	count(notice_no)
+	from 
+	notice
+	where
+	notice_no > 0		
+	]]>
+	</select>
+	
+-->
+</mapper>
+
+
+
+
+
+
+	

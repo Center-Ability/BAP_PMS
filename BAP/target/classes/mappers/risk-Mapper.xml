@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bap.mappers.risk-Mapper">
+
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and risk_title like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and risk_content like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and mem_name like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( risk_title like '%'||#{keyword}||'%' OR risk_content like '%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( risk_content like '%'||#{keyword}||'%' OR mem_name like '%'||#{keyword}||'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="listSearch" resultType="com.bap.dto.RiskDTO">
+		<![CDATA[
+		select 
+			*
+		from 
+			risk_view
+		where
+			risk_no > 0
+		]]>
+
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			risk_no desc
+		]]>
+	</select>
+
+	<select id="listSearchCount" resultType="int">
+		<![CDATA[
+		select 
+			count(risk_no)
+		from 
+			risk_view
+		where
+			risk_no > 0
+		]]>
+	
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			risk_no desc
+		]]>
+	</select>
+	
+	<select id="detail" resultType="com.bap.dto.RiskDTO">
+		select
+			*
+		from
+			risk_view
+		where
+			risk_no = #{risk_no}
+	</select>
+	
+	<update id="modify">
+		update
+			risk
+		set
+			risk_title = #{risk_title},
+			risk_content = #{risk_content},
+			risk_status = #{risk_status}
+		where
+			risk_no = #{risk_no}
+	</update>
+	
+	<delete id="remove">
+		delete from
+			risk
+		where
+			risk_no = #{risk_no}
+	</delete>
+	
+	<insert id="regist">
+		insert into
+			risk(risk_title, mem_id, risk_content, pro_num, risk_status)
+		values
+			(#{risk_title}, #{mem_id}, #{risk_content}, #{pro_num},  #{risk_status})
+	</insert>
+	
+	<select id="listAll" resultType="com.bap.dto.RiskDTO">
+	<![CDATA[
+	select
+	risk_no,
+	risk_title,
+	mem_name,
+	risk_status,
+	pro_num,
+	risk_date,
+	risk_content,
+	mem_id,
+	pro_name
+	from
+	risk_view
+	where
+	risk_no > 0
+	order by
+	risk_no desc,
+	risk_date desc
+	]]>
+	</select>
+	
+	<select id="listPro" resultType="com.bap.dto.RiskProVO">
+	select
+	p.pro_num,
+	p.pro_name
+	from team t, pro p
+	where t.pro_num = p.PRO_NUM
+	and t.mem_id=#{mem_id} and p.pro_status=1
+    
+	</select>
+	
+	<select id="searchPro" resultType="com.bap.dto.RiskProVO">
+	select
+	pro_num,
+	pro_name
+	from 
+	pro
+	where
+	pro 
+	</select>
+	
+<!--
+	<select id="listAll" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	notice_no,
+	notice_title,
+	mem_id,
+	notice_date,
+	notice_content
+	from
+	notice
+	where
+	notice_no > 0
+	order by
+	notice_no desc,
+	notice_date desc
+	]]>
+	</select>
+	
+	<select id="listPage" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	*
+	from notice
+	order by
+	notice_no desc		
+	]]>
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+	select
+	count(notice_no)
+	from 
+	notice
+	where
+	notice_no > 0		
+	]]>
+	</select>
+	
+-->
+</mapper>
+
+
+
+
+
+
+	

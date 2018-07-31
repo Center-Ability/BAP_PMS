@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  	
+<mapper namespace="com.bap.mappers.riskreply-Mapper">
+
+<select id ="list" resultType="com.bap.domain.RiskReplyVO">
+	select
+	*
+	from
+	riskreply_view
+	where
+	risk_no = #{risk_no}
+	order by
+	risk_reply_no desc
+</select>
+
+<insert id="create">
+	insert
+	into
+	risk_reply
+	(
+	mem_id,
+	risk_reply_content,
+	risk_no
+	)
+	values
+	(
+	#{mem_id},
+	#{risk_reply_content},
+	#{risk_no}
+	)
+</insert>
+
+<update id="update">
+	update
+	risk_reply
+	set
+	risk_reply_content = #{risk_reply_content},
+	regdate = SYSDATE
+	where
+	risk_reply_no = #{risk_reply_no}
+</update>
+
+<delete id="delete">
+	delete 
+	from 
+	risk_reply
+	where
+	risk_reply_no = #{risk_reply_no} 
+</delete>
+
+<select id="listPage" resultType="com.bap.domain.RiskReplyVO">
+	select
+	*
+	from
+	risk_reply
+	where
+	risk_no = #{risk_no}
+	order by
+	risk_reply_no desc
+</select>
+
+<select id="count" resultType="int">
+	select
+	count(risk_no)
+	from
+	risk_reply
+	where
+	risk_no = #{risk_no}
+</select>
+
+</mapper>

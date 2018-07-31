@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BAP">
+
+<insert id="create">
+insert into mem (mem_id, mem_pass, mem_name, mem_bir, mem_addr, mem_zipcode, mem_rank, mem_hp, mem_mail, mem_img)
+values(#{mem_id}, #{mem_pass}, #{mem_name}, #{mem_bir}, #{mem_addr}, #{mem_zipcode}, #{mem_rank}, #{mem_hp}, #{mem_mail}, #{mem_img})
+</insert>
+
+<select id="read" resultType="com.bap.domain.UserListVO">
+select * 
+from userList_view
+where mem_id = #{mem_id}
+</select>
+
+<sql id="enddate">
+	<choose>
+		<when test="mem_enabled == 0">
+			,mem_enddate=#{mem_enddate}
+		</when>
+	</choose>
+</sql>
+
+<update id="update">
+update mem 
+set 
+mem_pass=#{mem_pass}, 
+mem_name=#{mem_name}, 
+mem_bir=#{mem_bir}, 
+mem_addr=#{mem_addr}, 
+mem_zipcode=#{mem_zipcode}, 
+mem_rank=#{mem_rank},
+mem_hp=#{mem_hp}, 
+mem_mail=#{mem_mail}, 
+mem_enabled=#{mem_enabled}, 
+mem_regdate=#{mem_regdate},
+mem_img=#{mem_img} 
+<include refid="enddate" /> 
+where mem_id = #{mem_id}
+
+</update>
+
+<select id="listAll" resultType="com.bap.domain.UserListVO">
+select mem_id, mem_name, mem_rank, mem_regdate from userList_view where mem_id is not null order by mem_regdate desc
+</select>
+
+
+
+<!-- authority부분 -->
+<insert id="createAuth">
+insert into authority(mem_id, auth) values(#{mem_id}, #{auth})
+</insert>
+
+<update id="updateAuth">
+update authority set auth = #{auth} where mem_id = #{mem_id}
+</update>
+
+<select id="check_id" parameterType="str" resultType="int">
+select count(*) from userList_view
+where mem_id = #{mem_id}
+</select>
+
+<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'id'.toString()">
+				and mem_id like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'name'.toString()">
+				and mem_name like '%'||#{keyword}||'%'
+			</if>
+		</if>
+</sql>
+
+<select id="listSearch" resultType="com.bap.domain.UserListVO">
+select * from userList_view where mem_id is not null
+
+<include refid="search"></include>
+
+order by mem_regdate desc
+
+</select>
+
+<select id="listSearchCount" resultType="int">
+select count(mem_id) from userList_view where mem_id is not null
+
+<include refid="search"></include>
+
+order by mem_regdate desc
+</select>
+
+
+
+
+</mapper>
+
+
+
+
+
+
+	

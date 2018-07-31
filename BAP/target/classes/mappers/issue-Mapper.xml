@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bap.mappers.issue-Mapper">
+
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and issue_title like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and issue_content like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and mem_name like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( issue_title like '%'||#{keyword}||'%' OR issue_content like '%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( issue_content like '%'||#{keyword}||'%' OR mem_name like '%'||#{keyword}||'%')
+			</if>
+		</if>
+	</sql>
+	
+	<select id="listSearch" resultType="com.bap.dto.IssueDTO">
+		<![CDATA[
+		select 
+			*
+		from 
+			issue_view
+		where
+			issue_no > 0
+		]]>
+
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			issue_no desc
+		]]>
+	</select>
+
+	<select id="listSearchCount" resultType="int">
+		<![CDATA[
+		select 
+			count(issue_no)
+		from 
+			issue_view
+		where
+			issue_no > 0
+		]]>
+	
+		<include refid="search"></include>
+	
+		<![CDATA[
+		order by 
+			issue_no desc
+		]]>
+	</select>
+	
+	<select id="detail" resultType="com.bap.dto.IssueDTO">
+		select
+			*
+		from
+			issue_view
+		where
+			issue_no = #{issue_no}
+	</select>
+	
+	<update id="modify">
+		update
+			issue
+		set
+			issue_title = #{issue_title},
+			issue_content = #{issue_content},
+			issue_status = #{issue_status}
+		where
+			issue_no = #{issue_no}
+	</update>
+	
+	<delete id="remove">
+		delete from
+			issue
+		where
+			issue_no = #{issue_no}
+	</delete>
+	
+	<insert id="regist">
+		insert into
+			issue(issue_title, mem_id, issue_content, pro_num, issue_status)
+		values
+			(#{issue_title}, #{mem_id}, #{issue_content}, #{pro_num},  #{issue_status})
+	</insert>
+	
+	<select id="listAll" resultType="com.bap.dto.IssueDTO">
+	<![CDATA[
+	select
+	issue_no,
+	issue_title,
+	mem_name,
+	issue_status,
+	pro_num,
+	issue_date,
+	issue_content,
+	mem_id,
+	pro_name
+	from
+	issue_view
+	where
+	issue_no > 0
+	order by
+	issue_no desc,
+	issue_date desc
+	]]>
+	</select>
+	
+	<select id="listPro" resultType="com.bap.dto.RiskProVO">
+	select
+	p.pro_num,
+	p.pro_name
+	from team t, pro p
+	where t.pro_num = p.PRO_NUM
+	and t.mem_id=#{mem_id} and p.pro_status=1
+    
+	</select>
+	
+	
+	
+<!--
+	<select id="listAll" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	notice_no,
+	notice_title,
+	mem_id,
+	notice_date,
+	notice_content
+	from
+	notice
+	where
+	notice_no > 0
+	order by
+	notice_no desc,
+	notice_date desc
+	]]>
+	</select>
+	
+	<select id="listPage" resultType="com.bap.domain.NoticeVO">
+	<![CDATA[
+	select
+	*
+	from notice
+	order by
+	notice_no desc		
+	]]>
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+	select
+	count(notice_no)
+	from 
+	notice
+	where
+	notice_no > 0		
+	]]>
+	</select>
+	
+-->
+</mapper>
+
+
+
+
+
+
+	

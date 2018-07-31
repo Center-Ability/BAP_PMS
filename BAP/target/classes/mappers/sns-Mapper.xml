@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bap.mappers.sns-Mapper">
+	
+	<insert id="create">
+		insert into
+			SNS(mem_id, sns_content, pro_num)
+		values(#{mem_id},#{sns_content},#{pro_num})
+	</insert>
+	
+	<select id="listAll" resultType="com.bap.dto.SnsDTO">
+		<![CDATA[
+			select sns_no, sns_date, mem_name, mem_rank, sns_content
+			from sns_view
+			where pro_num = #{pro_num}
+			order by sns_date
+		]]>
+	</select>
+	
+	<select id="search_pro_num" resultType="Integer">
+		select pro_num from team where mem_id = #{mem_id}
+	</select>
+	
+	<delete id="delete">
+		delete from
+			SNS
+		where
+			sns_no = #{sns_no}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+	

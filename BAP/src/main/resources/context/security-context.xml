@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<http pattern="/resources/**" security="none" />
+
+	<!-- 인증처리 -->
+	<authentication-manager id="memberAuthManager">
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select mem_id as username, mem_pass as password, mem_enabled as enabled
+         		 from mem
+         		 where mem_id=?"
+
+				authorities-by-username-query="select mem_id as username, auth as authority
+         		 from authority
+         		 where mem_id=?" />
+
+		</authentication-provider>
+	</authentication-manager>
+
+	<!-- 권한처리 -->
+	<http use-expressions="true"
+		authentication-manager-ref="memberAuthManager" pattern="/**">
+		
+		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/login/pwFind" access="permitAll" />
+		<intercept-url pattern="/**" access="permitAll" />
+		
+		
+		<!-- <intercept-url pattern="/home" access="hasAnyAuthority('manager', 'auth_pm', 'auth_qm', 'auth_mem')" /> -->
+
+		<access-denied-handler error-page="/accessDenied"/>
+		<form-login login-page="/login"
+			login-processing-url="/loginForm"
+			username-parameter="mem_id"
+			password-parameter="mem_pass"
+			authentication-success-handler-ref="loginSuccessSecurityHandler"
+			authentication-failure-handler-ref="LoginFailureSecurityHandler"
+		/>
+	
+		<logout logout-url="/logout"
+				invalidate-session="true"
+				logout-success-url="/login"
+		/>
+
+	 </http>
+	
+		<beans:bean id="loginSuccessSecurityHandler"
+	  		      class="com.bap.security.LoginSuccessHandler"
+	              p:defaultTargetUrl="/pro/detail"
+	    />
+	    
+		<beans:bean id="LoginFailureSecurityHandler"
+            class="com.bap.security.LoginFailureHandler"
+            p:defaultFailureUrl="/login"
+            p:useForward="true"
+        />
+
+</beans:beans>

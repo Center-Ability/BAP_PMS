@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		p:driverClassName="oracle.jdbc.driver.OracleDriver"
+
+		p:url="jdbc:oracle:thin:@192.168.0.77:1521:xe" p:username="bap"
+		p:password="123456" />
+
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:configLocation="classpath:/sqlConfig.xml"
+		p:mapperLocations="classpath:mappers/*-Mapper.xml" />
+
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate"
+		c:sqlSessionFactory-ref="sqlSessionFactory" />
+		
+	<bean id="memDAO"
+		  class="com.bap.persistence.MemDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="noticeDAO"
+		  class="com.bap.persistence.NoticeDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="riskDAO"
+		  class="com.bap.persistence.RiskDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="issueDAO"
+		  class="com.bap.persistence.IssueDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="riskreplyDAO"
+		  class="com.bap.persistence.RiskReplyDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="issuereplyDAO"
+		  class="com.bap.persistence.IssueReplyDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="snsDAO"
+		  class="com.bap.persistence.SnsDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="proDAO"
+		  class="com.bap.persistence.ProDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="teamDAO"
+		  class="com.bap.persistence.TeamDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+	/>
+	
+	<bean id="loginService"
+		  class="com.bap.service.LoginServiceImpl"
+		  p:memDAO-ref="memDAO"
+	/>
+	
+	<bean id="noticeService"
+		  class="com.bap.service.NoticeServiceImpl"
+		  p:noticeDAO-ref="noticeDAO"
+	/>
+	
+	<bean id="riskService"
+		  class="com.bap.service.RiskServiceImpl"
+		  p:riskDAO-ref="riskDAO"
+	/>
+	
+	<bean id="issueService"
+		  class="com.bap.service.IssueServiceImpl"
+		  p:riskDAO-ref="issueDAO"
+	/>
+	
+	<bean id="riskreplyService"
+		  class="com.bap.service.RiskReplyServiceImpl"
+		  p:DAO-ref="riskreplyDAO"
+	/>
+	
+	<bean id="issuereplyService"
+		  class="com.bap.service.IssueReplyServiceImpl"
+		  p:DAO-ref="issuereplyDAO"
+	/>
+	
+	<bean id="snsService"
+		  class="com.bap.service.SnsServiceImpl"
+		  p:snsDAO-ref="snsDAO"
+	/>
+	
+	<bean id="proService"
+		  class="com.bap.service.ProServiceImpl"
+		  p:proDAO-ref="proDAO"
+	/>
+	
+	<bean id="groupService"
+		  class="com.bap.service.GroupServiceImpl"
+		  p:memDAO-ref="memDAO"
+		  p:snsDAO-ref="snsDAO"
+		  p:teamDAO-ref="teamDAO"
+	/>
+		  
+	<!-- Gmail -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    	<property name="host" value="smtp.gmail.com" />
+    	<property name="port" value="587" />
+    	<property name="username" value="bappms1234@gmail.com" />
+    	<property name="password" value="wnddkd1234" />
+    	<property name="javaMailProperties">
+    		<props>
+    			<prop key="mail.smtp.auth">true</prop>
+            	<prop key="mail.smtp.starttls.enable">true</prop>
+        	</props>
+    	</property>
+	</bean> 
+  
+	<bean id="email"
+    	  class="com.bap.domain.Email"
+    />
+   
+    <bean id="emailSender"
+    	  class="com.bap.service.EmailSender"
+    	  p:mailSender-ref="mailSender" 
+	/>
+	
+	<bean id="userListDAO"
+		  class="com.bap.persistence.UserListDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+		  />
+	<bean id="authorityDAO"
+		  class="com.bap.persistence.AuthorityDAOImpl"
+		  p:sqlSession-ref="sqlSession"
+		  />
+		  
+	<bean id="userListService"
+		  class="com.bap.service.UserListServiceImpl"
+		  p:authDao-ref="authorityDAO"
+		  p:userListDAO-ref="userListDAO"
+		  />
+
+</beans>

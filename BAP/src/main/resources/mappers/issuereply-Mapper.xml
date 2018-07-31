@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	 "-//mybatis.org//DTD Mapper 3.0//EN"
+  	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  	
+<mapper namespace="com.bap.mappers.issuereply-Mapper">
+
+<select id ="list" resultType="com.bap.domain.IssueReplyVO">
+	select
+	*
+	from
+	issuereply_view
+	where
+	issue_no = #{issue_no}
+	order by
+	issue_reply_no desc
+</select>
+
+<insert id="create">
+	insert
+	into
+	issue_reply
+	(
+	mem_id,
+	issue_reply_content,
+	issue_no
+	)
+	values
+	(
+	#{mem_id},
+	#{issue_reply_content},
+	#{issue_no}
+	)
+</insert>
+
+<update id="update">
+	update
+	issue_reply
+	set
+	issue_reply_content = #{issue_reply_content},
+	regdate = SYSDATE
+	where
+	issue_reply_no = #{issue_reply_no}
+</update>
+
+<delete id="delete">
+	delete 
+	from 
+	issue_reply
+	where
+	issue_reply_no = #{issue_reply_no} 
+</delete>
+
+<select id="listPage" resultType="com.bap.domain.IssueReplyVO">
+	select
+	*
+	from
+	issue_reply
+	where
+	issue_no = #{issue_no}
+	order by
+	issue_reply_no desc
+</select>
+
+<select id="count" resultType="int">
+	select
+	count(issue_no)
+	from
+	issue_reply
+	where
+	issue_no = #{issue_no}
+</select>
+
+</mapper>
