@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bap.domain.MemVO;
 import com.bap.domain.ProVO;
@@ -70,6 +71,14 @@ public class ProjectController {
 		proService.createPro(dto);
 		
 		return "/project/detail";
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@ResponseBody
+	public String search(String status) throws Exception {
+		System.out.println(status);
+		
+		return "";
 	}
 	
 }

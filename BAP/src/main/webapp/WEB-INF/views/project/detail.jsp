@@ -14,7 +14,7 @@
 		</div>
 		<div class="btn-group" style="margin: 15px; margin-top: 0px; padding: 0px; width: 100%;">
 		
-			<button type="button" class="btn btn-info" style="margin-right: 10px;">프로젝트 조건설정</button>
+			<button type="button" class="btn btn-info" style="margin-right: 4px;">프로젝트 조건설정</button>
 			
 			<div class="btn-group">
 				<button type="button" class="btn btn-info">프로젝트 상태</button>
@@ -23,10 +23,10 @@
 					<!-- <span class="sr-only">Toggle Dropdown</span> -->
 				</button>
 				<div class="dropdown-menu" role="menu">
-					<a class="dropdown-item" href="#">전체</a>
-					<a class="dropdown-item" href="#">대기</a>
-					<a class="dropdown-item" href="#">진행</a>
-					<a class="dropdown-item" href="#">완료</a>
+					<a class="dropdown-item" onclick="statusSelect_All()">전체</a>
+					<a class="dropdown-item" onclick="statusSelect_Wait()">대기</a>
+					<a class="dropdown-item" onclick="statusSelect_Progress()">진행</a>
+					<a class="dropdown-item" onclick="statusSelect_Completion()">완료</a>
 				</div>
 			</div>
 			
@@ -243,6 +243,27 @@
 	$(document).ready(function(){
 	    $(".dropdown-toggle").dropdown();
 	});
+	
+	
+	
+	function statusSelect_All() {
+		
+		var data = {"status" : "null"};
+		
+		$.ajax({
+			url : "/project/search",
+			type : "get",
+			data : data,
+			success : function(result) {
+				alert(result);
+			},
+			error : function(request,status,error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
+	}
+	
+	
 	
 	</script>
 	
