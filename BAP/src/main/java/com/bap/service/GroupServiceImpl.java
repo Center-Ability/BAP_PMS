@@ -31,15 +31,13 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public List<MemVO> myTeamList(String mem_id) throws Exception {
-		int pro_num = snsDAO.search_pro_num(mem_id);
-		System.out.println(pro_num);
+	public List<MemVO> myTeamList(int pro_num) throws Exception {
 		return memDAO.myTeamList(pro_num);
 	}
 
 	@Override
-	public void groupSave(String modifyData, String mem_id) throws Exception {
-		teamDAO.modify(modifyData, mem_id);
+	public void groupSave(String modifyData, int pro_num) throws Exception {
+		teamDAO.modify(modifyData, pro_num);
 	}
 
 }

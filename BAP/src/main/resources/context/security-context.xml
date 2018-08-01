@@ -51,14 +51,11 @@
 	 </http>
 	
 		<beans:bean id="loginSuccessSecurityHandler"
-	  		      class="com.bap.security.LoginSuccessHandler"
-	              p:defaultTargetUrl="/pro/detail"
+	  		        class="com.bap.security.LoginSuccessHandler"
 	    />
 	    
 		<beans:bean id="LoginFailureSecurityHandler"
-            class="com.bap.security.LoginFailureHandler"
-            p:defaultFailureUrl="/login"
-            p:useForward="true"
+            		class="com.bap.security.LoginFailureHandler"
         />
 
 </beans:beans>

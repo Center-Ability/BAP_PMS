@@ -116,6 +116,7 @@
 	<bean id="proService"
 		  class="com.bap.service.ProServiceImpl"
 		  p:proDAO-ref="proDAO"
+		  p:teamDAO-ref="teamDAO"
 	/>
 	
 	<bean id="groupService"

@@ -8,7 +8,7 @@ import com.bap.dto.GroupInfoDTO;
 
 public interface ProDAO {
 	
-	public void create(ProVO proVO) throws SQLException;
+	public int create(ProVO proVO) throws SQLException;
 	
 	public ProVO readProjectOne(int pro_num) throws SQLException;
 	
@@ -17,4 +17,6 @@ public interface ProDAO {
 	public String searchMem_nameById(String mem_id) throws SQLException;
 	
 	public List<GroupInfoDTO> searchGroupInfoByPro_num(int pro_num) throws Exception;
+	
+	public List<ProVO> searchProInfoByStatus(ProVO proVO) throws Exception;
 }

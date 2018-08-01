@@ -8,7 +8,7 @@ import com.bap.dto.GroupInfoDTO;
 
 public interface ProService {
 	
-	public void createPro(CreateProDTO createProDTO) throws Exception;
+	public int createPro(CreateProDTO createProDTO) throws Exception;
 	
 	public ProVO readProjectOne(int pro_num) throws Exception;
 	
@@ -17,5 +17,7 @@ public interface ProService {
 	public String searchMem_nameById(String mem_id) throws Exception;
 	
 	public List<GroupInfoDTO> searchGroupInfoByPro_num(int pro_num) throws Exception;
+	
+	public List<ProVO> searchProInfoByStatus(ProVO proVO) throws Exception;
 	
 }

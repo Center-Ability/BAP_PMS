@@ -21,8 +21,9 @@ public class ProDAOImpl implements ProDAO {
 	private static String namespace = "com.bap.mappers.pro-Mapper";
 
 	@Override
-	public void create(ProVO proVO) throws SQLException {
+	public int create(ProVO proVO) throws SQLException {
 		session.insert(namespace + ".create", proVO);
+		return (int)session.selectOne(namespace + ".searchLatestPro_num");
 	}
 
 	@Override
@@ -43,6 +44,11 @@ public class ProDAOImpl implements ProDAO {
 	@Override
 	public List<GroupInfoDTO> searchGroupInfoByPro_num(int pro_num) throws Exception {
 		return (List<GroupInfoDTO>)session.selectList(namespace + ".searchGroupInfoByPro_num", pro_num);
+	}
+
+	@Override
+	public List<ProVO> searchProInfoByStatus(ProVO proVO) throws Exception {
+		return (List<ProVO>)session.selectList(namespace + ".searchProInfoByStatus", proVO);
 	}
 
 }

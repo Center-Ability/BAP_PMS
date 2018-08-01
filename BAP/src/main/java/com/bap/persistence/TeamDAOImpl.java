@@ -11,13 +11,13 @@ public class TeamDAOImpl implements TeamDAO {
 private SqlSession session;
 	
 	public void setSqlSession(SqlSession session) {
-		this.session=session;
+		this.session = session;
 	}
 	
 	private static String namespace = "com.bap.mappers.team-Mapper";
 	
 	@Override
-	public void modify(String modifyData, String mem_id) throws SQLException {
+	public void modify(String modifyData, int pro_num) throws SQLException {
 		
 		String str = modifyData.substring(0, modifyData.length()-1);
 		str = str.replace("[관리자]","");
@@ -26,7 +26,7 @@ private SqlSession session;
 		str = str.replace("[팀원]","");
 		String[] array = str.split(",");
 		
-		int pro_num = (int)session.selectOne("com.bap.mappers.sns-Mapper.search_pro_num", mem_id);
+		
 		TeamVO teamVO = new TeamVO();
 		teamVO.setPro_num(pro_num);
 		
@@ -42,6 +42,11 @@ private SqlSession session;
 			session.insert(namespace + ".create", teamVO);
 		}
 
+	}
+
+	@Override
+	public void addTeamCreator(TeamVO teamVO) throws SQLException {
+		session.insert(namespace + ".addTeamCreator", teamVO);
 	}
 
 }

@@ -18,6 +18,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.bap.domain.MemVO;
 import com.bap.service.LoginService;
+import com.bap.service.ProService;
 
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
@@ -43,9 +44,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		ApplicationContext ctx = new GenericXmlApplicationContext("classpath:context/root-context.xml");
 		
 		LoginService service = (LoginService)ctx.getBean("loginService");
+		ProService proService = (ProService)ctx.getBean("proService");
 		
 		try {
 			MemVO memVO = service.loginData(successID);
+			
 			
 			String rank=memVO.getMem_rank();
 			if(rank.equals("관리자")) {
@@ -59,6 +62,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			}
 			
 			session.setAttribute("loginUser", memVO);
+			
+			// 현재 로그인 된 유저의 프로젝트 번호를 세션에 담아주기
+			int pro_num = proService.searchPro_numById(memVO.getMem_id());
+			System.out.println(pro_num);
+			session.setAttribute("nowProject", pro_num);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

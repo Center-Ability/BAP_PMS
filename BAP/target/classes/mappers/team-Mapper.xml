@@ -11,5 +11,12 @@
 	
 	<delete id="delete">
 		delete from TEAM where pro_num = #{pro_num}
-	</delete>	
+	</delete>
+	
+	<insert id="addTeamCreator">
+		insert into
+			TEAM(pro_num, mem_id)
+		values (#{pro_num},#{mem_id})
+	</insert>
+	
 </mapper>

@@ -23,9 +23,9 @@
 		select
 			pro_num
 		from
-			TEAM
+			SEARCHPRO_NUMBYID
 		where
-			mem_id = #{mem_id}
+			mem_id=#{mem_id}
 	</select>
 	
 	<select id="searchMem_nameById" resultType="String">
@@ -47,6 +47,37 @@
 			where
 				pro_num = #{pro_num}
 		]]>
+	</select>
+	
+	
+	
+	<!-- 프로젝트 상태에 따라 프로젝트 정보 가져오기 -->
+	<sql id="searchProInfo">
+		<if test="pro_status != 3">
+			<if test="pro_status == 0">
+				where pro_status = 0
+			</if>
+			<if test="pro_status == 1">
+				where pro_status = 1
+			</if>
+			<if test="pro_status == 2">
+				where pro_status = 2
+			</if>
+		</if>
+	</sql>
+	
+	<select id="searchProInfoByStatus" resultType="com.bap.domain.ProVO">
+		<![CDATA[
+			select
+				*
+			from
+				PRO
+		]]>
+		<include refid="searchProInfo"></include>
+	</select>
+	
+	<select id="searchLatestPro_num" resultType="Integer">
+		select MAX(pro_num) from PRO
 	</select>
 	
 </mapper>
